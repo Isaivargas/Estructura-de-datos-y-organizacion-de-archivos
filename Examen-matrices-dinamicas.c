@@ -8,131 +8,172 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
 
 //FUNCIONES
 
-int genesis(int renglones,int columnas,int *matrix);
-int fillcolum(int *matrix,int renglones,int columnas);
-int showmatrix(int *matrix,int renglones,int columnas);
-int fillsnake(int *matrix,int renglones,int columnas);
+int *genesis(int renglones,int columnas);
+int fillsnake(int *matrix,int **actual,int renglones,int columnas);
+int fillcolum(int *matrix,int **actual,int renglones,int columnas);
+int fillspiral(int *matrix,int **actual,int renglones,int columnas);
+int showmatrix(int *matrix,int **actual,int renglones,int columnas);
 
 int main(int argc, const char * argv[]) {
     short int opcion=0;
     int renglones=0,columnas=0;
-    int *matrix = NULL,v=0;
-    printf("Bienvenido\n");
-    do {
-        printf("Teclea la opcion deseada\n1.-Crear nueva matriz\n2.-LLenar por columna\n3.-Llenado viborita\n4.-llenar en espiral\n5.-Cuadrado magico\n6.-Comprobar Cuadrado magico\n7.-Imprimir matriz\n8.-Vaciar Matriz\n9.-Salir\n");
+    int *matrix = NULL,*actual = NULL;
+     do {
+        printf("\tTeclea la opcion deseada\n 1.-Crear nueva matriz\n 2.-LLenar por columna\n 3.-Llenado viborita\n 4.-llenar en espiral\n 5.-Cuadrado magico\n 6.-Comprobar Cuadrado magico\n 7.-Imprimir matriz\n 8.-Vaciar Matriz\n 9.-Salir\n");
         scanf("%hd",&opcion);
-
+        
         switch (opcion) {
-
+                
             case 1:
-                if (!v){
+                if (!matrix){
                     printf("Introduce el tamaño de los renglones\t");
                     scanf("%d",&renglones);
                     printf("columnas\t");
                     scanf("%d",&columnas);
-
-
+                    
+                    
                     //Funcion crear matriz
-                    v=genesis(renglones,columnas,matrix);
+                    matrix=genesis(renglones,columnas);
                     printf("Matriz creada\n");
-                }else if (v==0){printf("ERROR al crear vector\n");}
-                else {printf("¡Error al crear la matriz\nYa existe una Matriz!\n");}
+                }else if (matrix!=NULL){printf("¡ERROR \nYa existe una matriz !\n");}
                 printf("\n");
                 break;
-
+                
             case 2:
-                fillcolum(&matrix,renglones,columnas);
-                printf("\n\n");
+                fillcolum(matrix,&actual,renglones,columnas);
+                printf("\n");
                 break;
-
+                
             case 3:
-                fillsnake(&matrix,renglones,columnas);
-                printf("\n\n");
+                fillsnake(matrix,&actual,renglones,columnas);
+                printf("\n");
                 break;
-
-            case 7:
-                showmatrix(&matrix,renglones,columnas);
+                
+            case 4:
+                fillspiral(matrix,&actual,renglones,columnas);
                 printf("\n");
                 break;
 
+                
+            case 7:
+                showmatrix(matrix,&actual,renglones,columnas);
+                printf("\n");
+                break;
+                
+            case 8:
+                
+                break;
+                
+                
+                
             default: printf("Opcion NO valida !");
                 break;
-
+                
         }}while (opcion<=9);
-
-
-
+    
+    
+    
     return 0;
 }
 
 //Funcion crear matriz
-int genesis(int renglones,int columnas,int *matrix){
+int *genesis(int renglones,int columnas){
+    int *matrix;
     matrix=(int *)malloc((renglones*columnas)*sizeof(int));
-
+    
     if (matrix!=NULL){
-        return 1;
+        return matrix;
     }else
     { return 0;}
 }
 
-int fillcolum(int *matrix,int renglones,int columnas){
-    short int i,j=0,count=1;
-
-    for (i=0; i<renglones; i++){
-
-
-        for (j=0; j<columnas; j++){
-
-          *(matrix+j*columnas+i)=count;
-            count=count+1;
-        }
-    }
-    showmatrix(matrix, renglones, columnas);
+int apocalipsis(){
+    
     return 1;
 }
 
-int fillsnake(int *matrix,int renglones,int columnas){
-    int i=0,j,count=1,cambio=0,x=0,y=0;
-
-
-   for (i=0; i<renglones; i++){
-       if(i%2==0){
-             for (j=0; j<columnas; j++){
-           *(matrix+(i*renglones)+j)=count;
-            count++;
-             }
-       }else{
-
-        for (j=columnas-1; j>=0; j--){
-
-            *(matrix+(i*renglones)+j)=count;
+int fillcolum(int *matrix,int **actual,int renglones,int columnas){
+    short int i,j=0,count=1;
+    *actual=matrix;
+    
+    for (j=0; j<columnas; j++){
+        for (i=0; i<renglones; i++){
+            *(*actual+i*columnas+j)=count;
             count=count+1;
-               }
-       }
+        }
     }
+        return 1;
+}
 
+int fillsnake(int *matrix,int **actual,int renglones,int columnas){
+    int i=0,j,count=1;
+    *actual=matrix;
+    
+    if (count<=(renglones*columnas)){
+    for (i=0; i<renglones; i++){
+        if(i%2==0){
+            for (j=0; j<columnas; j++){
+                *(matrix+(i*columnas)+j)=count;
+                count++;
+            }
+        }else{
+            
+            for (j=columnas-1; j>=0; j--){
+                *(matrix+(i*columnas)+j)=count;
+                count=count+1;
+            } }
+           }
+          }
+    
 
-
-    showmatrix(matrix, renglones, columnas);
     return 1;
 }//end zickzack
 
 
 
 
-int showmatrix(int *matrix,int renglones,int columnas){
+int fillspiral(int *matrix,int **actual,int renglones,int columnas){
+    int i=0,j,count=1,cambio=0;
+    *actual=matrix;
+    
+        for (i=renglones-1; i>0; i--){// primer ciclo llenado
+            if(cambio==0){
+               for (j=0; j<columnas; j++){
+               **(actual+(i*columnas)+j)=count;
+               count++;
+               }}//end primer ciclo
+            if(cambio==1){
+                for (j=0; j<columnas; j++){
+                    *(matrix+(i*columnas)+j)=count;
+                    count++;
+                }}//end segundo ciclo
+            
+        
+    }
+    
+    return 1;
+}//end zickzack
+
+
+
+
+
+
+int showmatrix(int *matrix,int **actual,int renglones,int columnas){
     short int i,j=0;
-
+   
     for (i=0; i<renglones; i++){
+         printf("\t");
         for (j=0; j<columnas; j++){
-            printf("%d\t",*(matrix+j+i*columnas));
+            printf("| %2d |",*(matrix+(i*columnas)+j));
         }printf("\n");}
-
+    
     return 1;
 }
+
 
 
