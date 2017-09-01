@@ -1,4 +1,4 @@
-//  PRACTICA #3
+/  PRACTICA #3
 //  Matrices dinamicas
 //  Created by Isaí Vargas on 09/01/17.
 //  Copyright © 2017 Isaí Vargas. All rights reserved.
@@ -23,6 +23,9 @@ int fillcolum(int *matrix,int **actual,int renglones,int columnas);
 int *fillspiral(int *matrix,int **actual,int renglones,int columnas);
 //impresion del contenido del arreglo
 int showmatrix(int *matrix,int **actual,int renglones,int columnas);
+
+int magicube(int *matrix,int **actual,int renglones,int columnas);
+
 
 int main(int argc, const char * argv[]) {
     short int opcion=0;
@@ -63,6 +66,14 @@ int main(int argc, const char * argv[]) {
                 break;
 
 
+            case 5:
+
+                magicube(matrix,&actual,renglones,columnas);
+
+                break;
+
+
+
             case 7:
                 showmatrix(matrix,&actual,renglones,columnas);
 
@@ -90,13 +101,15 @@ int *genesis(int renglones,int columnas){
        matrix=(int *)malloc((renglones*columnas)*sizeof(int));
         return matrix;
 }
-
+//Funcion borrar matriz
 int *apocalipsis(int **matrix){
     free(*matrix);
     *matrix=NULL;
     return *matrix;
 }
 
+
+//
 int fillcolum(int *matrix,int **actual,int renglones,int columnas){
     short int i,j=0,count=1;
     *actual=matrix;
@@ -138,44 +151,38 @@ int fillsnake(int *matrix,int **actual,int renglones,int columnas){
 
 
 int *fillspiral(int *matrix,int **actual,int renglones,int columnas){
-    int i=0,j = 0,count=1,cambio=0;
+    int i=0,j = 0,count=1;
     int iaux=renglones-1,jaux=columnas-1,auxi=0,auxj=0;
- //   auxi-auxfi=0,auxj-auxci=0;
- // auxff=iaux auxcf=jaux
+
     *actual=matrix;
 
-if(*actual!=NULL){
-//->
-i=iaux;
-for (j=auxj; j<=jaux; j++){
-    *(*actual+(i*renglones)+j)=count;
-                    count++;
-}
-iaux--;
+    if(*actual!=NULL){
+        while(count<=renglones*columnas){
+            i=iaux;
+        for (j=auxj; j<=jaux; j++){
+            *(*actual+(i*renglones)+j)=count;
+            count++;
+            }  iaux--;
 
-//^
-j=jaux;
-for (i=iaux; i>=auxi; i--){
-    *(*actual+(i*renglones)+j)=count;
-                    count++;
-}
-jaux--;
+            j=jaux;
+        for (i=iaux; i>=auxi; i--){
+            *(*actual+(i*renglones)+j)=count;
+            count++;
+           } jaux--;
 
-//<-
-i=auxi;
-for (j=jaux; j>=auxj; j--){
-    *(*actual+(i*renglones)+j)=count;
-                    count++;
-}
-auxi++;
-//
-j=auxj;
-for (i=auxi; i<=iaux; i++){
-    *(*actual+(i*renglones)+j)=count;
-                    count++;
+            i=auxi;
+        for (j=jaux; j>=auxj; j--){
+            *(*actual+(i*renglones)+j)=count;
+            count++;
+           }auxi++;
 
+            j=auxj;
+        for (i=auxi; i<=iaux; i++){
+            *(*actual+(i*renglones)+j)=count;
+            count++;
 }
-auxj++;
+             auxj++;
+}
 
 
 
@@ -184,9 +191,56 @@ auxj++;
     return actual;
 }//end
 
+int  magicube(int *matrix,int **actual,int renglones,int columnas){
 
+    int iaux=0,jaux=0,auxi=renglones-1,auxj=columnas-1;
+    int iaux2,jaux2;
+    int i=0,j=0,count=1;;
+    *actual=matrix;
 
+    for (i=0; i<=renglones ;i++){
+        for (j=0; j<=columnas; j++)
+            *(*actual+(i*columnas)+j)=0;
+        }
+    i=0;
+    j=(columnas/2);
+    *(*actual+(i*columnas)+j)=count;
+    count++;
+    while(count<=(columnas*renglones)){
+    if(i-1<iaux){
+        i=auxi;
+        iaux2=i;
+    }
+    else {
+        i--;
+        iaux2=i;
+    }
 
+    if(j+1>auxj){
+        j=jaux;
+        jaux2=j;
+    }
+    else{
+        j++;
+        jaux2=j;
+    }
+    if((*(*actual+(i*columnas)+j))==0){
+        *(*actual+(i*columnas)+j)=count;
+        count++;
+    }
+    else{
+        i=iaux2;
+        j=jaux2;
+        i++;
+        if((*(*actual+(i*renglones)+j))==0){
+        *(*actual+(i*columnas)+j)=count;
+        count++;
+        }
+    }
+
+  }
+  return 1;
+}
 
 
 int showmatrix(int *matrix,int **actual,int renglones,int columnas){
@@ -201,6 +255,3 @@ int showmatrix(int *matrix,int **actual,int renglones,int columnas){
     printf("\n");
     return 1;
 }
-
-
-
